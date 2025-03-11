@@ -23,3 +23,10 @@ Sovellukseen voi luoda käyttäjän, ja jokainen käyttäjä voi tehdä omia opi
 - Käyttäjä voi aikatauluttaa kurssin (periodi, vuosi)
 - Käyttäjä voi tarkastella tilastoja opinnoistaan (suoritetut opintopisteet, kuinka monta prosenttia suoritettu/jäljellä, kuinka monta op keskimäärin periodissa yms.)
 - Käyttäjä voi poistaa kursseja.
+
+## Jatkokehitysideoita
+
+- Käyttäjät voivat jakaa omia kokemuksiaan kursseista, kuten kuinka vaativilta tai aikaa vieviltä ne tuntuivat, jotta muut käyttjät voivat hyödyntää näitä tietoja suunnitellessaan omia opintojaan.
+- Sovellus voi muistuttaa tulevista kursseista, deadlineista tai suoritustavoitteista.
+- Käyttäjät voivat luoda ryhmiä ja jakaa suunnitelmiaan esimerkiksi samassa tutkinto-ohjelmassa olevien kanssa.
+- Käyttäjä voi asettaa tavoitteita esim. tietty määrä opintopisteitä per vuosi ja seurata edistymistään.
