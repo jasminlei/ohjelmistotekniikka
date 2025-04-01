@@ -16,19 +16,31 @@ Harjoitustyön aiheena on opintojen seurantasovellus. Käyttäjä voi luoda opin
 
 ## Asennus
 
-1. Asenna riippuvuudet komennolla:
+1. Kloonaa projekti haluamaasi paikkaan komennolla:
+
+```
+git clone https://github.com/jasminlei/ohjelmistotekniikka
+```
+
+2. Siirry harjoitustyö-kansioon komennolla:
+
+```
+cd harjoitustyo
+```
+
+3. Asenna riippuvuudet komennolla:
 
 ```
 poetry install
 ```
 
-2. Alusta sovellus (luo tietokanta-tiedoston data-kansioon):
+4. Alusta sovellus (luo tietokanta-tiedoston data-kansioon):
 
 ```
 poetry run invoke build
 ```
 
-3. Käynnistä sovellus komennolla:
+5. Käynnistä sovellus komennolla:
 
 ```
 poetry run invoke start
