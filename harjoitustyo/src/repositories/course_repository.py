@@ -13,6 +13,25 @@ class CourseRepository:
         return [
             Course(
                 course_id=row["id"],
+                user_id=row["user_id"],
+                code=row["code"],
+                name=row["name"],
+                credits=row["credits"],
+                description=row["description"],
+                is_scheduled=row["is_scheduled"],
+                is_completed=row["is_completed"],
+            )
+            for row in rows
+        ]
+
+    def find_all_by_user(self, user_id):
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT * FROM courses WHERE user_id = ?", (user_id,))
+        rows = cursor.fetchall()
+        return [
+            Course(
+                course_id=row["id"],
+                user_id=row["user_id"],
                 code=row["code"],
                 name=row["name"],
                 credits=row["credits"],
@@ -26,8 +45,9 @@ class CourseRepository:
     def create(self, course):
         cursor = self._connection.cursor()
         cursor.execute(
-            "INSERT INTO courses (code, name, credits, description, is_scheduled, is_completed) VALUES (?, ?, ?, ?, ?, ?)",
+            "INSERT INTO courses (user_id, code, name, credits, description, is_scheduled, is_completed) VALUES (?, ?, ?, ?, ?, ?, ?)",
             (
+                course.user_id,
                 course.code,
                 course.name,
                 course.credits,

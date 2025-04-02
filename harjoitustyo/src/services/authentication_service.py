@@ -19,5 +19,10 @@ class AuthenticationService:
     def get_logged_in_user(self):
         return self.logged_in_user
 
+    def get_logged_in_user_id(self):
+        if self.current_user:
+            return self.current_user.user_id
+        return None
+
 
 auth_service = AuthenticationService(user_repository)

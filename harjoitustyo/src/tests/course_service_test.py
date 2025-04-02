@@ -2,6 +2,14 @@ import unittest
 from services.course_service import CourseService
 
 
+class MockAuthenticationService:
+    def __init__(self):
+        self.logged_in_user_id = 1
+
+    def get_logged_in_user_id(self):
+        return self.logged_in_user_id
+
+
 class MockCourseRepository:
     def __init__(self):
         self.courses = []
@@ -16,8 +24,9 @@ class MockCourseRepository:
 
 class TestCourseService(unittest.TestCase):
     def setUp(self):
+        self.auth_service = MockAuthenticationService()
         self.course_repository = MockCourseRepository()
-        self.course_service = CourseService(self.course_repository)
+        self.course_service = CourseService(self.course_repository, self.auth_service)
         self.course_service.add_course("TKT111", "Kurssi 1", 5, "hyvä kurssi")
         self.course_service.add_course("TKT222", "Kurssi 2", 3, "vaikea kurssi")
 

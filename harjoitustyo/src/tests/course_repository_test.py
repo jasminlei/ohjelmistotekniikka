@@ -12,7 +12,9 @@ class TestCourseRepository(unittest.TestCase):
         self.course_repository = CourseRepository(self.connection)
 
     def test_create_course(self):
-        course = Course(None, "TKT0", "Testikurssi", 5, "Kiva kurssi", False, False)
+        course = Course(
+            None, 123, "TKT0", "Testikurssi", 5, "Kiva kurssi", False, False
+        )
 
         self.course_repository.create(course)
 
@@ -21,8 +23,8 @@ class TestCourseRepository(unittest.TestCase):
         self.assertEqual(course.name, "Testikurssi")
 
     def test_find_all(self):
-        course1 = Course(None, "TKT300", "Kurssi 1", 5, "", False, False)
-        course2 = Course(None, "TKT400", "Kurssi 2", 3, "", True, False)
+        course1 = Course(None, 111, "TKT300", "Kurssi 1", 5, "", False, False)
+        course2 = Course(None, 333, "TKT400", "Kurssi 2", 3, "", True, False)
 
         self.course_repository.create(course1)
         self.course_repository.create(course2)

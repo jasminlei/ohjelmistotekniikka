@@ -41,12 +41,14 @@ def create_tables(connection):
     cursor.execute("""
     CREATE TABLE courses (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
         code TEXT NOT NULL,
         name TEXT NOT NULL,
         credits INTEGER NOT NULL,
         description TEXT,
         is_scheduled BOOLEAN DEFAULT FALSE,
-        is_completed BOOLEAN DEFAULT FALSE
+        is_completed BOOLEAN DEFAULT FALSE,
+        FOREIGN KEY (user_id) REFERENCES users(id)
     );
     """)
 

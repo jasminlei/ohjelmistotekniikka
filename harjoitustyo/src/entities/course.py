@@ -2,6 +2,7 @@ class Course:
     def __init__(
         self,
         course_id,
+        user_id,
         code,
         name,
         credits,
@@ -10,6 +11,7 @@ class Course:
         is_scheduled=False,
     ):
         self.course_id = course_id
+        self.user_id = user_id
         self.code = code
         self.name = name
         self.credits = credits
