@@ -20,8 +20,8 @@ class AuthenticationService:
         return self.logged_in_user
 
     def get_logged_in_user_id(self):
-        if self.current_user:
-            return self.current_user.user_id
+        if self.logged_in_user:
+            return self.logged_in_user.id
         return None
 
 
