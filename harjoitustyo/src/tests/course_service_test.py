@@ -1,5 +1,6 @@
 import unittest
 from services.course_service import CourseService
+from entities.year import AcademicYear
 
 
 class MockAuthenticationService:
@@ -13,13 +14,35 @@ class MockAuthenticationService:
 class MockCourseRepository:
     def __init__(self):
         self.courses = []
+        self.course_periods = [
+            (1, 1),
+            (2, 1),
+            (3, 2),
+        ]
+        self.next_course_id = 1
 
     def find_all(self):
         return self.courses
 
     def create(self, course):
+        course.course_id = self.next_course_id
+        self.next_course_id += 1
         self.courses.append(course)
         return course
+
+    def get_courses_by_academicyear(self, academicyear):
+        courses_for_year = []
+        for i in range(len(self.courses)):
+            if self.course_periods[i][1] == academicyear.year_id:
+                courses_for_year.append(self.courses[i])
+        return courses_for_year
+
+    def mark_as_completed(self, course_id):
+        for course in self.courses:
+            if course.course_id == course_id:
+                course.is_completed = True
+                return True
+        return False
 
 
 class TestCourseService(unittest.TestCase):
@@ -39,6 +62,13 @@ class TestCourseService(unittest.TestCase):
 
     def test_get_all_courses(self):
         courses = self.course_service.get_all_courses()
+        self.assertEqual(len(courses), 2)
+        self.assertEqual(courses[0].code, "TKT111")
+        self.assertEqual(courses[1].code, "TKT222")
+
+    def test_get_courses_by_academicyear(self):
+        academicyear = AcademicYear(1, 2021, 2022)
+        courses = self.course_service.get_courses_by_academicyear(academicyear)
         self.assertEqual(len(courses), 2)
         self.assertEqual(courses[0].code, "TKT111")
         self.assertEqual(courses[1].code, "TKT222")
