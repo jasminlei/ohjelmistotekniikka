@@ -3,8 +3,8 @@ from entities.user import User
 
 
 class UserService:
-    def __init__(self, user_repository):
-        self._user_repository = user_repository
+    def __init__(self, repository):
+        self._user_repository = repository
 
     def create_user(self, username, password):
         existing_user = self._user_repository.find_by_username(username)

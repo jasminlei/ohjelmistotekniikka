@@ -1,4 +1,4 @@
-from repositories.user_repository import user_repository
+from repositories.user_repository import user_repository as user_repo
 
 
 class AuthenticationService:
@@ -25,4 +25,4 @@ class AuthenticationService:
         return None
 
 
-auth_service = AuthenticationService(user_repository)
+auth_service = AuthenticationService(user_repo)
