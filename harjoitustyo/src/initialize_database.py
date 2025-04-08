@@ -15,13 +15,16 @@ def drop_tables(connection):
         DROP TABLE IF EXISTS periods;
     """)
     cursor.execute("""
-        DROP TABLE IF EXISTS courseperiods;
+        DROP TABLE IF EXISTS course_periods;
     """)
     cursor.execute("""
         DROP TABLE IF EXISTS academicyears;
     """)
     cursor.execute("""
         DROP TABLE IF EXISTS studyplans;
+    """)
+    cursor.execute("""
+        DROP TABLE IF EXISTS studyplan_academicyear;
     """)
 
     connection.commit()
@@ -48,6 +51,8 @@ def create_tables(connection):
         description TEXT,
         is_scheduled BOOLEAN DEFAULT FALSE,
         is_completed BOOLEAN DEFAULT FALSE,
+        grade INTEGER,
+        completion_date TEXT,
         FOREIGN KEY (user_id) REFERENCES users(id)
     );
     """)
@@ -62,7 +67,7 @@ def create_tables(connection):
     """)
 
     cursor.execute("""
-    CREATE TABLE courseperiods (
+    CREATE TABLE course_periods (
         course_id INTEGER,
         period_id INTEGER,
         FOREIGN KEY (course_id) REFERENCES courses(id),
@@ -82,12 +87,20 @@ def create_tables(connection):
     cursor.execute("""
     CREATE TABLE studyplans (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        plan_name TEXT,
-        user_id INTEGER,
-        academicyear_id INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users(id),
-        FOREIGN KEY (academicyear_id) REFERENCES academicyears(id)
+        plan_name TEXT NOT NULL,
+        user_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id)
         );
+    """)
+
+    cursor.execute("""
+    CREATE TABLE studyplan_academicyear (
+        studyplan_id INTEGER,
+        academicyear_id INTEGER,
+        PRIMARY KEY (studyplan_id, academicyear_id),
+        FOREIGN KEY (studyplan_id) REFERENCES studyplans(id),
+        FOREIGN KEY (academicyear_id) REFERENCES academicyears(id)
+    );
     """)
 
     connection.commit()
