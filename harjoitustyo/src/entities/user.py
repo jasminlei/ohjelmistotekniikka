@@ -1,5 +1,8 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class User:
-    def __init__(self, username, password, id=None):
-        self.username = username
-        self.password = password
-        self.id = id
+    username: str
+    password: str
+    id: int = None
