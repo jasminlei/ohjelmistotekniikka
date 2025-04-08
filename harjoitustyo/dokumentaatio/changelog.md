@@ -5,3 +5,10 @@
 - Käyttäjä voi luoda käyttäjätunnuksen, kirjautua sisään ja ulos, sekä listata kaikki järjestelmään luodut käyttäjätunnukset
 - Kirjautunut käyttäjä voi luoda järjestelmään kursseja sekä listata kaikki lisätyt kurssit
 - UserRepositoryn, CourseRepositoryn, UserServicen, AuthenticationService ja CourseServicen tämänhetkiset toiminnot on testattu
+
+## Viikko 4
+
+- Refaktoroitu olemassaolevaa koodia siistimmäksi.
+- Lisätty luokat StudyPlan, Period, AcademicYear, StudyPlanRepository, PeriodRepository, AcademicYearRepository, StudyPlanService, PeriodService ja AcademicYearService.
+- Lisätty Tkinter-UI, jossa voi tällä hetkellä rekisteröityä, kirjautua sisään, lisätä kursseja, tarkastella lisättyjä kursseja, lisätä opintosuunnitelmia, lisätä opintosuunnitelmiin vuosia, tarkastella kunkin vuoden periodeita.
+- Jokaiselle luokalle on tehty testejä tärkeimmistä ominaisuuksista.
