@@ -128,6 +128,10 @@ class StudyPlansView(Frame):
             ).pack()
             return
 
+        self.studyplan_service.add_academic_year_to_plan(
+            studyplan, int(start_year), int(end_year)
+        )
+
         self.load_academic_years(studyplan)
 
     def load_academic_years(self, studyplan):
