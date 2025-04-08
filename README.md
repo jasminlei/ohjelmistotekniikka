@@ -14,6 +14,8 @@ Harjoitustyön aiheena on opintojen seurantasovellus. Käyttäjä voi luoda opin
 
 [Changelog](https://github.com/jasminlei/ohjelmistotekniikka/blob/main/harjoitustyo/dokumentaatio/changelog.md)
 
+[Arkkitehtuuri](https://github.com/jasminlei/ohjelmistotekniikka/blob/main/harjoitustyo/dokumentaatio/arkkitehtuuri.md)
+
 ## Asennus
 
 1. Kloonaa projekti haluamaasi paikkaan komennolla:
@@ -52,8 +54,10 @@ poetry run invoke start
 
 - Testien suoritus: `poetry run invoke test`
 
-- Testikattavuusraportin voi generoida (avautuu suoraan selaimeen): `poetry run invoke coverage_report`
+- Testikattavuusraportin voi generoida (avautuu suoraan selaimeen): `poetry run invoke coverage-report`
+
+- Pylintin voi suorittaa: `poetry run invoke pylint`
 
 ## Käyttöohjeet
 
-- Ohjelma käynnistyy komennolla `poetry run invoke start`, ja terminaaliin tulostuu kaikki tämänhetkiset käytössä olevat toiminnot ja pikanäppäimet niiden käyttämiseen.
+- Ohjelma käynnistyy komennolla `poetry run invoke start`. Tämä avaa sovelluksen uudessa ikkunassa. Luo ensin käyttäjätunnus ja kirjaudu sisään, jonka jälkeen voit lisätä kursseja tai luoda opintosuunnitelman.
