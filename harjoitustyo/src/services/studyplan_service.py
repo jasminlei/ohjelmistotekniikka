@@ -25,25 +25,36 @@ class StudyPlanService:
 
     def add_academic_year_to_plan(self, studyplan, year_start, year_end):
         if self._academic_year_already_in_plan(studyplan, year_start, year_end):
-            raise ValueError(
-                "Tämä akateeminen vuosi on jo lisätty opintosuunnitelmaan!"
-            )
+            return False, "Tämä vuosi on jo lisätty opintosuunnitelmaan!"
 
-        success, academic_year_or_error = self._academic_year_service.create(
-            year_start, year_end
-        )
+        success, result = self._academic_year_service.create(year_start, year_end)
 
         if not success:
-            return False, academic_year_or_error
+            return False, result
 
-        academic_year = academic_year_or_error
-        self._studyplan_repository.add_academic_year(studyplan, academic_year)
-        return True, academic_year
+        academicyear = result
+        self._studyplan_repository.add_academic_year(studyplan, academicyear)
+        return True, academicyear
 
     def _academic_year_already_in_plan(self, studyplan, year_start, year_end):
         return self._academic_year_service.year_exists_in_studyplan(
             studyplan, year_start, year_end
         )
+
+    def get_total_credits(self, studyplan):
+        academicyears = self._academic_year_service.get_academic_years_by_studyplan(
+            studyplan
+        )
+        credits = 0
+        for year in academicyears:
+            credits += self._academic_year_service.get_total_credits(year)
+        return credits
+
+    def get_completed_credits(self, studyplan):
+        pass
+
+    def get_mean_grade(self, studyplan):
+        pass
 
 
 studyplan_service = StudyPlanService(studyplan_repo, academicyear_serv, period_serv)

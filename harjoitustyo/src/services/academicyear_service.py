@@ -16,13 +16,13 @@ class AcademicYearService:
         if not re.match(r"^\d{4}$", str(start_year)) or not re.match(
             r"^\d{4}$", str(end_year)
         ):
-            return False, "Years must be in the format YYYY (e.g., 2023, 2024)."
+            return False, "Vuosien on oltava muotoa YYYY (esim. 2023)."
 
         if end_year != start_year + 1:
-            return False, "End year must be exactly one year after start year."
+            return False, "Vuosien on oltava peräkkäisiä."
 
         if start_year >= end_year:
-            return False, "Start year must be smaller than end year."
+            return False, "Alkuvuoden täytyy olla pienempi kuin loppuvuosi."
 
         return True, None
 
@@ -44,11 +44,11 @@ class AcademicYearService:
     def get_academic_years_by_studyplan(self, studyplan):
         return self._academicyear_repository.find_all_from_studyplan(studyplan.plan_id)
 
-    def get_total_etcs(self, academicyear):
-        pass
+    def get_total_credits(self, academicyear):
+        return self._academicyear_repository.get_total_credits(academicyear.year_id)
 
-    def get_completed_etcs(self, academicyear):
-        pass
+    def get_completed_credits(self, academicyear):
+        return self._academicyear_repository.get_completed_credits(academicyear.year_id)
 
 
 academicyear_service = AcademicYearService(academicyear_repo, course_serv, period_serv)
