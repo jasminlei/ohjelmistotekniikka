@@ -13,7 +13,7 @@ from ui.ui import UI
 def main():
     window = Tk()
     window.title("Opintojenseurantasovellus Gifu")
-    window.geometry("1000x600")
+    window.geometry("1000x1000")
 
     style = Style(theme="sandstone")
     window.tk_setPalette(background=style.colors.primary)
