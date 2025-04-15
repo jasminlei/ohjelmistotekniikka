@@ -53,12 +53,49 @@ class TestCourseService(unittest.TestCase):
         self.course_service.add_course("TKT111", "Kurssi 1", 5, "hyvä kurssi")
         self.course_service.add_course("TKT222", "Kurssi 2", 3, "vaikea kurssi")
 
-    def test_add_course(self):
-        course = self.course_service.add_course(
+    def test_add_course_valid(self):
+        success, course_or_error = self.course_service.add_course(
             "TKT000", "Testikurssi", 5, "Kiva kurssi"
         )
-        self.assertEqual(course.code, "TKT000")
+        self.assertTrue(success)
+        self.assertEqual(course_or_error.code, "TKT000")
         self.assertEqual(len(self.course_repository.courses), 3)
+
+    def test_add_course_invalid_code(self):
+        success, error_message = self.course_service.add_course(
+            "", "Testikurssi", 5, "Kiva kurssi"
+        )
+        self.assertFalse(success)
+        self.assertEqual(
+            error_message, "Kurssikoodi, nimi ja opintopisteet ovat pakollisia."
+        )
+
+    def test_add_course_invalid_ects(self):
+        success, error_message = self.course_service.add_course(
+            "TKT003", "Testikurssi", -1, "Kiva kurssi"
+        )
+        self.assertFalse(success)
+        self.assertEqual(
+            error_message, "Opintopisteiden on oltava positiivinen kokonaisluku."
+        )
+
+    def test_add_course_description_too_long(self):
+        long_description = "a" * 251
+        success, error_message = self.course_service.add_course(
+            "TKT004", "Testikurssi", 5, long_description
+        )
+        self.assertFalse(success)
+        self.assertEqual(
+            error_message, "Kurssikuvauksen merkkirajoitus on 250 merkkiä."
+        )
+
+    def test_add_course_name_too_long(self):
+        long_name = "a" * 151
+        success, error_message = self.course_service.add_course(
+            "TKT005", long_name, 5, "Kiva kurssi"
+        )
+        self.assertFalse(success)
+        self.assertEqual(error_message, "Kurssin nimen merkkirajoitus on 150 merkkiä.")
 
     def test_get_all_courses(self):
         courses = self.course_service.get_all_courses()

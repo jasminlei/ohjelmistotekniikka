@@ -28,10 +28,8 @@ class TestAcademicYearRepository(unittest.TestCase):
         academic_year1 = self.academicyear_repository.create(2023, 2024)
         academic_year2 = self.academicyear_repository.create(2024, 2025)
 
-        self.studyplan_repository.add_academic_year(
-            self.studyplan, academic_year1)
-        self.studyplan_repository.add_academic_year(
-            self.studyplan, academic_year2)
+        self.studyplan_repository.add_academic_year(self.studyplan, academic_year1)
+        self.studyplan_repository.add_academic_year(self.studyplan, academic_year2)
 
         academicyears = self.academicyear_repository.find_all_from_studyplan(
             studyplan_id
@@ -43,8 +41,7 @@ class TestAcademicYearRepository(unittest.TestCase):
     def test_if_exists_in_studyplan_returns_true(self):
         studyplan_id = self.studyplan.plan_id
         academic_year = self.academicyear_repository.create(2022, 2023)
-        self.studyplan_repository.add_academic_year(
-            self.studyplan, academic_year)
+        self.studyplan_repository.add_academic_year(self.studyplan, academic_year)
         exists = self.academicyear_repository.exists_in_studyplan(
             studyplan_id, 2022, 2023
         )

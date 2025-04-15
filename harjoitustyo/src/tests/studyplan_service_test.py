@@ -1,111 +1,52 @@
 import unittest
+from initialize_database import initialize_database
+from database_connection import get_database_connection
 from services.studyplan_service import StudyPlanService
-from entities.year import AcademicYear
-from entities.period import Period
+from services.academicyear_service import AcademicYearService
+from services.period_service import PeriodService
+from services.course_service import CourseService
+from repositories.studyplan_repository import StudyPlanRepository
+from repositories.academicyear_repository import AcademicYearRepository
+from repositories.course_repository import CourseRepository
+from repositories.period_repository import PeriodRepository
 
 
-class MockStudyPlanRepository:
+class MockAuthenticationService:
     def __init__(self):
-        self.studyplans = []
-        self.next_id = 1
-        self.academicyears_studyplans = []
+        self.logged_in_user_id = 1
 
-    def create(self, study_plan):
-        study_plan.plan_id = self.next_id
-        self.next_id += 1
-        self.studyplans.append(study_plan)
-        return study_plan
-
-    def add_academic_year(self, studyplan, academicyear):
-        self.academicyears_studyplans.append((studyplan.plan_id, academicyear.year_id))
-        return True
-
-    def get_by_user_id(self, user_id):
-        return [sp for sp in self.studyplans if sp.user_id == user_id]
-
-
-class MockAcademicYearRepository:
-    def __init__(self):
-        self.academic_years = []
-        self.next_id = 1
-
-    def create(self, start_year, end_year):
-        academic_year = AcademicYear(self.next_id, start_year, end_year)
-        self.next_id += 1
-        self.academic_years.append(academic_year)
-        return academic_year
-
-    def exists_in_studyplan(self, plan_id, start_year, end_year):
-        for ay in self.academic_years:
-            if ay.start_year == start_year and ay.end_year == end_year:
-                return True
-        return False
-
-    def find_all_from_studyplan(self, studyplan_id):
-        return [ay for ay in self.academic_years if ay.year_id == studyplan_id]
-
-
-class MockPeriodRepository:
-    def __init__(self):
-        self.periods = []
-
-    def create(self, period):
-        self.periods.append(period)
-
-    def get_periods_by_academic_year(self, academic_year):
-        return [p for p in self.periods if p.academic_year_id == academic_year.year_id]
-
-
-class MockPeriodService:
-    def __init__(self):
-        self.academicyears_periods = []
-
-    def create(self, academic_year):
-        for period_number in range(1, 6):
-            period = Period(None, academic_year.year_id, period_number)
-            self.academicyears_periods.append(period)
-
-    def get_periods_by_academic_year(self, academic_year):
-        return [
-            period
-            for period in self.academicyears_periods
-            if period.academic_year_id == academic_year.year_id
-        ]
-
-
-class MockAcademicYearService:
-    def __init__(self):
-        self.created_years = []
-        self.existing_years = set()
-
-    def create(self, start_year, end_year):
-        if end_year != start_year + 1:
-            return False, "End year must be exactly one year after start year."
-        if start_year >= end_year:
-            return False, "Start year must be smaller than end year."
-
-        year_id = len(self.created_years) + 1
-        academic_year = AcademicYear(year_id, start_year, end_year)
-        self.created_years.append(academic_year)
-        return True, academic_year
-
-    def year_exists_in_studyplan(self, studyplan, start_year, end_year):
-        return (studyplan.plan_id, start_year, end_year) in self.existing_years
-
-    def add_existing_year_to_plan(self, plan_id, start_year, end_year):
-        self.existing_years.add((plan_id, start_year, end_year))
+    def get_logged_in_user_id(self):
+        return self.logged_in_user_id
 
 
 class TestStudyPlanService(unittest.TestCase):
     def setUp(self):
-        self.mock_studyplan_repo = MockStudyPlanRepository()
-        self.mock_academicyear_service = MockAcademicYearService()
-        self.mock_period_service = MockPeriodService()
+        initialize_database(test=True)
+        self.connection = get_database_connection(test=True)
+        self.studyplan_repository = StudyPlanRepository(self.connection)
+        self.academicyear_repository = AcademicYearRepository(self.connection)
+        self.period_repository = PeriodRepository(self.connection)
+        self.course_repository = CourseRepository(self.connection)
 
+        self.auth_service = MockAuthenticationService()
+        self.period_service = PeriodService(self.period_repository)
+        self.academicyear_service = AcademicYearService(
+            self.academicyear_repository, None, self.period_service
+        )
         self.studyplan_service = StudyPlanService(
-            self.mock_studyplan_repo,
-            self.mock_academicyear_service,
-            self.mock_period_service,
+            self.studyplan_repository, self.academicyear_service, self.period_service
+        )
+
+        self.course_service = CourseService(self.course_repository, self.auth_service)
+
+        self.test_studyplan = self.studyplan_service.create_studyplan(1, "Suunnitelma")
+        success, self.test_academicyear = (
+            self.studyplan_service.add_academic_year_to_plan(
+                self.test_studyplan, 2024, 2025
+            )
+        )
+        self.test_periods = self.period_service.get_periods_by_academic_year(
+            self.test_academicyear
         )
 
     def test_create_studyplan(self):
@@ -113,7 +54,7 @@ class TestStudyPlanService(unittest.TestCase):
 
         self.assertEqual(studyplan.plan_name, "Testi suunnitelma")
         self.assertEqual(studyplan.user_id, 3)
-        self.assertEqual(studyplan.plan_id, 1)
+        self.assertEqual(studyplan.plan_id, 2)
 
     def test_add_academic_year_to_plan(self):
         studyplan = self.studyplan_service.create_studyplan(
@@ -127,3 +68,45 @@ class TestStudyPlanService(unittest.TestCase):
         self.assertTrue(success)
         self.assertEqual(result.start_year, 2024)
         self.assertEqual(result.end_year, 2025)
+
+    def test_get_all_credits_returns_correct_number_one_academic_year(self):
+        success, course1 = self.course_service.add_course("TKT1", "Nimi1", 5)
+        self.assertTrue(success)
+        success, course2 = self.course_service.add_course("TKT2", "Nimi2", 5)
+        self.assertTrue(success)
+        success, course3 = self.course_service.add_course("TKT3", "Nimi3", 5)
+        self.assertTrue(success)
+
+        self.course_service.add_course_to_period(self.test_periods[0], course1)
+        self.course_service.add_course_to_period(self.test_periods[0], course2)
+        self.course_service.add_course_to_period(self.test_periods[0], course3)
+
+        credits = self.studyplan_service.get_total_credits(self.test_studyplan)
+        self.assertEqual(credits, 15)
+
+    def test_get_all_credits_returns_correct_number_two_academic_years(self):
+        success, other_academicyear = self.studyplan_service.add_academic_year_to_plan(
+            self.test_studyplan, 2025, 2026
+        )
+        self.assertTrue(success)
+
+        periods = self.period_service.get_periods_by_academic_year(other_academicyear)
+
+        success, course1 = self.course_service.add_course("TKT1", "Nimi1", 5)
+        self.assertTrue(success)
+        success, course2 = self.course_service.add_course("TKT2", "Nimi2", 5)
+        self.assertTrue(success)
+
+        self.course_service.add_course_to_period(self.test_periods[0], course1)
+        self.course_service.add_course_to_period(self.test_periods[0], course2)
+
+        success, course3 = self.course_service.add_course("TKT3", "Nimi3", 3)
+        self.assertTrue(success)
+        success, course4 = self.course_service.add_course("TKT4", "Nimi4", 5)
+        self.assertTrue(success)
+
+        self.course_service.add_course_to_period(periods[0], course3)
+        self.course_service.add_course_to_period(periods[0], course4)
+
+        credits = self.studyplan_service.get_total_credits(self.test_studyplan)
+        self.assertEqual(credits, 18)
