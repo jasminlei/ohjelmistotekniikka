@@ -12,3 +12,10 @@
 - Lisätty luokat StudyPlan, Period, AcademicYear, StudyPlanRepository, PeriodRepository, AcademicYearRepository, StudyPlanService, PeriodService ja AcademicYearService.
 - Lisätty Tkinter-UI, jossa voi tällä hetkellä rekisteröityä, kirjautua sisään, lisätä kursseja, tarkastella lisättyjä kursseja, lisätä opintosuunnitelmia, lisätä opintosuunnitelmiin vuosia, tarkastella kunkin vuoden periodeita.
 - Jokaiselle luokalle on tehty testejä tärkeimmistä ominaisuuksista.
+
+## Viikko 5
+
+- Paranneltu UI:ta
+- Lisätty testejä
+- Refaktroitu koodia
+- Tällä hetkellä käyttäjä voi aiempien viikkojen ominaisuuksien lisäksi lisätä kursseja opintosuunnitelmaan tiettyyn periodiin, poistaa kurssin opintosuunnitelmasta ja merkitä kurssin suoritetuksi.
