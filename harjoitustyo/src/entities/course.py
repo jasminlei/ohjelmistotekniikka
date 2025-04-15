@@ -10,6 +10,5 @@ class Course:
     credits: int
     description: str = ""
     is_completed: bool = False
-    is_scheduled: bool = False
     grade: int = None
     completion_date: int = None
