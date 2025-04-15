@@ -22,11 +22,12 @@ Sovellukseen voi luoda käyttäjän, ja jokainen käyttäjä voi tehdä omia opi
 - Käyttäjä voi lisätä kullekin kurssille tietoja (koodi, nimi, kuvaus, oma muistiinpano, opintopisteet) ✅
 - Käyttäjä voi luoda opintosuunnitelman. ✅
 - Käyttäjä voi luoda opintosuunnitelmaan vuosia. ✅
-- Käyttäjä voi lisätä opintosuunnitelmaansa kursseja.
-- Käyttäjä voi merkitä kurssin suoritetuksi, parhaillaan suorituksessa olevaksi, keskeytetyksi tai ei-aloitetuksi.
-- Käyttäjä voi aikatauluttaa kurssin (periodi, vuosi).
+- Käyttäjä voi lisätä opintosuunnitelmaansa kursseja. ✅
+- Käyttäjä voi aikatauluttaa kurssin tietylle vuodelle ja periodille. ✅
+- Käyttäjä voi merkitä kurssin suoritetuksi. ✅
+- Käyttäjä voi ottaa kurssin pois suunnitelmasta. ✅
 - Käyttäjä voi tarkastella tilastoja opinnoistaan (suoritetut opintopisteet, kuinka monta prosenttia suoritettu/jäljellä, kuinka monta op keskimäärin periodissa yms.)
-- Käyttäjä voi poistaa kursseja.
+- Käyttäjä voi poistaa kursseja, vuosia tai opintosuunnitelmia.
 
 ## Jatkokehitysideoita
 
