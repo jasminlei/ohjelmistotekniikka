@@ -30,9 +30,9 @@ class StudyPlansView(Frame):
         self.currently_shown_year = None
         self.academic_year_entry_visible = False
 
-        Label(
-            self, text="Lisätyt opintosuunnitelmat", font=("Helvetica Neue", 16, "bold")
-        ).pack(pady=10)
+        Label(self, text="Lisätyt opintosuunnitelmat", font=("Arial", 16, "bold")).pack(
+            pady=10
+        )
 
         self.studyplans_frame = Frame(self)
         self.studyplans_frame.pack(pady=10)
@@ -87,7 +87,7 @@ class StudyPlansView(Frame):
         Label(
             self.details_frame,
             text=f"Opintosuunnitelma: {studyplan.plan_name}",
-            font=("Helvetica Neue", 14, "bold"),
+            font=("Arial", 14, "bold"),
         ).pack(pady=5)
 
         self.years_frame = Frame(self.details_frame)
@@ -95,9 +95,9 @@ class StudyPlansView(Frame):
 
         self.load_academic_years(studyplan)
 
-        Label(
-            self.details_frame, text="Lisää vuosi", font=("Helvetica Neue", 12, "bold")
-        ).pack(pady=5)
+        Label(self.details_frame, text="Lisää vuosi", font=("Arial", 12, "bold")).pack(
+            pady=5
+        )
 
         self.toggle_year_button = Button(
             self.details_frame,
@@ -335,9 +335,9 @@ class StudyPlansView(Frame):
         course_list_window = Toplevel(self)
         course_list_window.title("Valitse kurssi")
 
-        Label(
-            course_list_window, text="Kurssit", font=("Helvetica Neue", 14, "bold")
-        ).pack(pady=10)
+        Label(course_list_window, text="Kurssit", font=("Arial", 14, "bold")).pack(
+            pady=10
+        )
 
         self.add_course_view = AddCourseToPlanView(
             course_list_window,

@@ -17,7 +17,7 @@ def main():
 
     style = Style(theme="sandstone")
     window.tk_setPalette(background=style.colors.primary)
-    style.configure(".", font=("Helvetica Neue", 13))
+    style.configure(".", font=("Arial", 13))
 
     ui = UI(
         window,

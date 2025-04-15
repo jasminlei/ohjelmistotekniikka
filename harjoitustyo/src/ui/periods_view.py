@@ -77,7 +77,7 @@ class PeriodsView(Frame):
                 Label(
                     course_frame,
                     text=f"Arvosana: {str(course.grade) if course.grade else '-'}",
-                    width=10,
+                    width=20,
                     anchor="w",
                 ).pack(side=tk.LEFT, padx=4)
 
