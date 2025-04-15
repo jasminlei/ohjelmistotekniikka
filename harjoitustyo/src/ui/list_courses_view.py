@@ -15,20 +15,18 @@ class ListCoursesView(Frame):
         label.pack(pady=20)
 
         self.treeview = ttk.Treeview(
-            self, columns=("Code", "Name", "Credits", "Status", "Plan"), show="headings"
+            self, columns=("Code", "Name", "Credits", "Status"), show="headings"
         )
 
         self.treeview.heading("Code", text="Koodi", anchor="w")
         self.treeview.heading("Name", text="Kurssi", anchor="w")
         self.treeview.heading("Credits", text="Opintopisteet", anchor="w")
         self.treeview.heading("Status", text="Tila", anchor="w")
-        self.treeview.heading("Plan", text="Suunnitelma", anchor="w")
 
         self.treeview.column("Code", width=100)
         self.treeview.column("Name", width=150)
         self.treeview.column("Credits", width=100)
         self.treeview.column("Status", width=120)
-        self.treeview.column("Plan", width=120)
 
         self._populate_courses()
 
@@ -57,7 +55,6 @@ class ListCoursesView(Frame):
         courses = self._course_service.get_all_courses_by_user(self._logged_user)
         for course in courses:
             completed = "Suoritettu" if course.is_completed else "Ei suoritettu"
-            planned = "Suunnitelmassa" if course.is_scheduled else "Ei suunnitelmassa"
             self.treeview.insert(
                 "",
                 "end",
@@ -66,7 +63,6 @@ class ListCoursesView(Frame):
                     course.name,
                     course.credits,
                     completed,
-                    planned,
                 ),
             )
 
@@ -97,8 +93,6 @@ class ListCoursesView(Frame):
         Nimi: {course.name}
         Opintopisteet: {course.credits} op
         Kuvaus: {course.description}
-        Suunnitelma: {"Suunnitelmassa" if course.is_scheduled else "Ei suunnitelmassa"}
-        Periodi: {course.period if course.is_scheduled else "Ei määritelty"}
         """
         self.course_details_label.config(text=details_message)
 

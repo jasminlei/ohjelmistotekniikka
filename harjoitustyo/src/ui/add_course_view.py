@@ -6,9 +6,9 @@ class AddCourseView(Frame):
         super().__init__(root)
         self._course_service = course_service
         self._handle_back = handle_back
-        self.create_widgets()
+        self._create_widgets()
 
-    def create_widgets(self):
+    def _create_widgets(self):
         label = Label(
             self, text="Lisää kurssi", font=("Arial", 16), bootstyle="primary"
         )
@@ -71,8 +71,10 @@ class AddCourseView(Frame):
             self.error_label.config(text="Opintopisteiden tulee olla numero!")
             return
 
-        try:
-            course = self._course_service.add_course(code, name, credits, description)
+        success, course = self._course_service.add_course(
+            code, name, credits, description
+        )
+        if success:
             self.success_label.config(text=f"Kurssi {course.name} lisätty.")
-        except Exception:
-            self.error_label.config(text="Virhe kurssin lisäämisessä.")
+        else:
+            self.error_label.config(text=f"Virhe kurssin lisäämisessä: {course}")

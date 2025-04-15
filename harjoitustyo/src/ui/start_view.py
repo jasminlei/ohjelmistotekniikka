@@ -27,9 +27,9 @@ class StartView(Frame):
         self.handle_view_stats = handle_view_stats
         self.handle_view_studyplans = handle_view_studyplans
 
-        self.create_widgets()
+        self._create_widgets()
 
-    def create_widgets(self):
+    def _create_widgets(self):
         logged_in_user = self.auth_service.get_logged_in_user()
         if logged_in_user:
             label = Label(

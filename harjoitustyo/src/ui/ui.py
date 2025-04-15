@@ -33,6 +33,8 @@ class UI:
 
     def _hide_current_view(self):
         if self._current_view:
+            for widget in self._current_view.winfo_children():
+                widget.destroy()
             self._current_view.destroy()
         self._current_view = None
 

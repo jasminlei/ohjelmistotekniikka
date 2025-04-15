@@ -1,7 +1,11 @@
 import tkinter as tk
+from tkinter import Toplevel
 import ttkbootstrap as ttk
-from ui.add_course_view import AddCourseView
 from ttkbootstrap import Frame, Label, Button, Entry
+from datetime import datetime
+from ui.add_course_to_plan_view import AddCourseToPlanView
+from ui.periods_view import PeriodsView
+from ui.coursedetails_view import CourseDetailsView
 
 
 class StudyPlansView(Frame):
@@ -24,6 +28,7 @@ class StudyPlansView(Frame):
         self.handle_back = handle_back
         self.currently_shown_studyplan = None
         self.currently_shown_year = None
+        self.academic_year_entry_visible = False
 
         Label(
             self, text="Lisätyt opintosuunnitelmat", font=("Helvetica Neue", 16, "bold")
@@ -35,33 +40,40 @@ class StudyPlansView(Frame):
         self.details_frame = Frame(self)
         self.years_frame = None
 
+        self.studyplan_menu = ttk.Menubutton(
+            self.studyplans_frame,
+            text="Valitse opintosuunnitelma",
+            bootstyle="primary",
+            width=30,
+        )
+        self.studyplan_menu.pack(pady=5)
+
+        self.studyplan_menu.menu = tk.Menu(self.studyplan_menu, tearoff=0)
+        self.studyplan_menu["menu"] = self.studyplan_menu.menu
+
         self.load_studyplans()
 
         self.back_button = Button(
-            self, text="Takaisin", bootstyle="secondary", command=self.handle_back
+            self,
+            text="Takaisin",
+            bootstyle="secondary",
+            command=self.on_back_button_clicked,
         )
         self.back_button.pack(pady=10, side=tk.BOTTOM)
 
     def load_studyplans(self):
-        for widget in self.studyplans_frame.winfo_children():
-            widget.destroy()
+        self.studyplan_menu.menu.delete(0, "end")
 
         studyplans = self.studyplan_service.get_studyplans_by_user(self.logged_user)
-        if not studyplans:
-            Label(
-                self.studyplans_frame,
-                text="Ei lisättyjä opintosuunnitelmia.",
-            ).pack(pady=5)
-            return
 
         for studyplan in studyplans:
-            Button(
-                self.studyplans_frame,
-                text=studyplan.plan_name,
-                bootstyle="warning",
-                width=30,
-                command=lambda sp=studyplan: self.toggle_studyplan_details(sp),
-            ).pack(pady=5, padx=20, fill=tk.X)
+            self.studyplan_menu.menu.add_command(
+                label=studyplan.plan_name,
+                command=lambda sp=studyplan: self.on_studyplan_selected(sp),
+            )
+
+    def on_studyplan_selected(self, studyplan):
+        self.toggle_studyplan_details(studyplan)
 
     def toggle_studyplan_details(self, studyplan):
         if self.currently_shown_studyplan == studyplan:
@@ -87,13 +99,46 @@ class StudyPlansView(Frame):
             self.details_frame, text="Lisää vuosi", font=("Helvetica Neue", 12, "bold")
         ).pack(pady=5)
 
+        self.toggle_year_button = Button(
+            self.details_frame,
+            text="Lisää akateeminen vuosi",
+            bootstyle="primary",
+            command=lambda: self.toggle_academic_year_form(studyplan),
+        )
+
+        self.toggle_year_button.pack(pady=10)
+
+        self.details_frame.pack(pady=10)
+        self.currently_shown_studyplan = studyplan
+
+        self.year_error_label = Label(self.details_frame, text="", foreground="red")
+        self.year_error_label.pack()
+
+    def toggle_academic_year_form(self, studyplan):
+        if self.academic_year_entry_visible:
+            self.start_year_entry_frame.pack_forget()
+            self.end_year_entry_frame.pack_forget()
+            self.academic_year_entry_visible = False
+            self.toggle_year_button.config(text="Lisää suunnitelmaan vuosi")
+        else:
+            self.show_academic_year_form(studyplan)
+            self.academic_year_entry_visible = True
+            self.toggle_year_button.config(text="Piilota vuoden lisäys")
+
+    def show_academic_year_form(self, studyplan):
         entry_frame = Frame(self.details_frame)
         entry_frame.pack(pady=5)
 
-        self.start_year_entry = Entry(entry_frame, width=4)
+        self.start_year_entry_frame = entry_frame
+        self.start_year_entry = Entry(entry_frame, width=6)
+        self.start_year_entry.insert(0, "2024")
         self.start_year_entry.pack(side=tk.LEFT, padx=5)
+
         Label(entry_frame, text="-").pack(side=tk.LEFT)
-        self.end_year_entry = Entry(entry_frame, width=4)
+
+        self.end_year_entry_frame = entry_frame
+        self.end_year_entry = Entry(entry_frame, width=6)
+        self.end_year_entry.insert(0, "2025")
         self.end_year_entry.pack(side=tk.LEFT, padx=5)
 
         Button(
@@ -103,53 +148,66 @@ class StudyPlansView(Frame):
             command=lambda: self.add_academic_year(studyplan),
         ).pack(side=tk.LEFT, padx=10)
 
-        self.details_frame.pack(pady=10)
-        self.currently_shown_studyplan = studyplan
-
-    def hide_studyplan_details(self):
-        self.details_frame.pack_forget()
-        if self.years_frame:
-            self.years_frame.pack_forget()
-        for widget in self.details_frame.winfo_children():
-            widget.destroy()
-        self.currently_shown_studyplan = None
-
     def add_academic_year(self, studyplan):
         start_year = self.start_year_entry.get()
         end_year = self.end_year_entry.get()
 
-        if not (
-            start_year.isdigit()
-            and end_year.isdigit()
-            and int(start_year) < int(end_year)
-        ):
-            Label(
-                self.details_frame, text="Virheellinen vuosi!", foreground="red"
-            ).pack()
-            return
+        self.year_error_label.config(text="")
 
-        self.studyplan_service.add_academic_year_to_plan(
+        success, result = self.studyplan_service.add_academic_year_to_plan(
             studyplan, int(start_year), int(end_year)
         )
 
-        self.load_academic_years(studyplan)
+        if not success:
+            self.year_error_label.config(text=result)
+            self.after(5000, self.hide_error_label)
+        else:
+            self.load_academic_years(studyplan)
+
+    def hide_error_label(self):
+        self.year_error_label.config(text="")
+
+    def hide_studyplan_details(self):
+        for widget in self.details_frame.winfo_children():
+            widget.destroy()
+        self.currently_shown_studyplan = None
 
     def load_academic_years(self, studyplan):
-        for widget in self.years_frame.winfo_children():
-            widget.destroy()
+        if hasattr(self, "academic_year_menu"):
+            self.academic_year_menu.pack_forget()
+            self.academic_year_menu.destroy()
+
+        if self.years_frame:
+            for widget in self.years_frame.winfo_children():
+                widget.destroy()
 
         academic_years = self.academicyear_service.get_academic_years_by_studyplan(
             studyplan
         )
 
-        for year in academic_years:
-            Button(
+        if not academic_years:
+            Label(
                 self.years_frame,
-                text=f"{year.start_year}-{year.end_year}",
-                bootstyle="info",
-                width=30,
-                command=lambda y=year: self.toggle_year_details(y),
-            ).pack(pady=5, padx=10)
+                text="Ei lisättyjä vuosia.",
+            ).pack(pady=5)
+            return
+
+        self.academic_year_menu = ttk.Menubutton(
+            self.studyplans_frame,
+            text="Valitse vuosi",
+            bootstyle="warning",
+            width=30,
+        )
+        self.academic_year_menu.menu = tk.Menu(self.academic_year_menu, tearoff=0)
+        self.academic_year_menu["menu"] = self.academic_year_menu.menu
+
+        for academic_year in academic_years:
+            self.academic_year_menu.menu.add_command(
+                label=f"{academic_year.start_year}-{academic_year.end_year}",
+                command=lambda ay=academic_year: self.show_year_details(ay),
+            )
+
+        self.academic_year_menu.pack(pady=5)
 
     def toggle_year_details(self, academic_year):
         if self.currently_shown_year == academic_year:
@@ -174,63 +232,147 @@ class StudyPlansView(Frame):
         self.currently_shown_year = academic_year
 
     def load_periods(self, academic_year):
-        periods = self.period_service.get_periods_by_academic_year(academic_year)
+        if hasattr(self, "periods_view") and self.periods_view.winfo_exists():
+            self.periods_view.destroy()
 
-        if not periods:
-            Label(
-                self.year_details_frame,
-                text="Ei lisättyjä periodeja.",
-            ).pack()
-            return
+        self.periods_view = PeriodsView(
+            self.year_details_frame,
+            academic_year,
+            self.period_service,
+            self.course_service,
+            self.show_course_details,
+            self.show_add_course_view,
+        )
 
-        periods_notebook = ttk.Notebook(self.year_details_frame, width=450)
-        periods_notebook.pack(pady=5, fill=tk.BOTH, expand=True)
+    def hide_period_details(self):
+        if hasattr(self, "periods_view") and self.periods_view.winfo_exists():
+            self.periods_view.destroy()
 
-        for period in periods:
-            period_frame = Frame(periods_notebook)
-            periods_notebook.add(
-                period_frame,
-                text=f"Periodi {period.period_number}"
-                if period.period_number != 5
-                else "Kesä",
-            )
+    def show_course_details(self, course, period):
+        CourseDetailsView(
+            self,
+            course,
+            period,
+            self.course_service,
+            on_update=lambda: self.reload_periods(),
+        )
 
-            courses = self.course_service.get_courses_by_period(period)
+    def reload_periods(self):
+        self.hide_period_details()
+        self.load_periods(self.currently_shown_year)
 
-            if courses:
-                for course in courses:
-                    Label(
-                        period_frame, text=f"• {course.name}", font=("Arial", 9)
-                    ).pack(padx=5, pady=2)
-            else:
-                Label(
-                    period_frame, text="(Ei kursseja)", font=("Arial", 9, "italic")
-                ).pack(padx=5, pady=2)
+    def show_mark_completed_form(self, course, course_details_window):
+        for widget in course_details_window.winfo_children():
+            if (
+                isinstance(widget, Button)
+                and widget.cget("text") == "Merkitse suoritetuksi"
+            ):
+                widget.pack_forget()
 
-            Button(
-                period_frame,
-                text="Lisää kurssi",
-                bootstyle="success",
-                command=lambda p=period: self.show_add_course_view(p),
-            ).pack(pady=5)
+        form_frame = tk.Frame(course_details_window)
+        form_frame.pack(pady=10)
+
+        Label(form_frame, text="Suorituspäivämäärä (yyyy-mm-dd):").pack(pady=5)
+        today = datetime.today().strftime("%Y-%m-%d")
+        date_entry = Entry(form_frame)
+        date_entry.insert(0, today)
+        date_entry.pack(pady=5)
+
+        Label(form_frame, text="Arvosana:").pack(pady=5)
+        grade_var = tk.StringVar(value="Hyväksytty")
+
+        grades = ["1", "2", "3", "4", "5", "Hyväksytty"]
+        for grade in grades:
+            tk.Radiobutton(
+                form_frame, text=grade, variable=grade_var, value=grade
+            ).pack(side=tk.LEFT, padx=5)
+
+        Button(
+            form_frame,
+            text="Merkitse suoritetuksi",
+            bootstyle="success",
+            command=lambda: self.mark_course_as_completed(
+                course, grade_var.get(), date_entry.get(), course_details_window
+            ),
+        ).pack(pady=10)
+
+    def mark_course_as_completed(
+        self, course, grade, completion_date, course_details_window
+    ):
+        self.course_service.mark_as_completed(course, grade, completion_date)
+
+        if self.course_service.mark_as_completed(course, grade, completion_date):
+            self.hide_period_details()
+            self.load_periods(self.currently_shown_year)
+            course_details_window.destroy()
+            self.show_message("Suoritusmerkintä lisätty.")
+        else:
+            self.show_message("Virhe suoritusmerkinnän lisäämisessä.")
+
+    def delete_course_from_plan(self, course, period, course_details_window):
+        if self.course_service.remove_course_from_period(period, course):
+            self.hide_period_details()
+            self.load_periods(self.currently_shown_year)
+            course_details_window.destroy()
+            self.show_message("Kurssi poistettu opintosuunnitelmasta.")
+        else:
+            self.show_message("Virhe kurssin poistamisessa.")
+
+    def show_message(self, message):
+        message_label = Label(
+            self, text=message, font=("Arial", 10, "italic"), foreground="green"
+        )
+        message_label.pack(pady=10)
+        self.after(3000, message_label.destroy)
 
     def show_add_course_view(self, period):
-        self.year_details_frame.pack_forget()
+        if (
+            hasattr(self, "course_list_window")
+            and self.course_list_window.winfo_exists()
+        ):
+            self.course_list_window.destroy()
 
-        self.add_course_view = AddCourseView(
-            self.master,
+        course_list_window = Toplevel(self)
+        course_list_window.title("Valitse kurssi")
+
+        Label(
+            course_list_window, text="Kurssit", font=("Helvetica Neue", 14, "bold")
+        ).pack(pady=10)
+
+        self.add_course_view = AddCourseToPlanView(
+            course_list_window,
             self.course_service,
             self.add_course_to_period,
             period,
+            self.logged_user,
         )
         self.add_course_view.pack(pady=10)
 
+        Button(
+            course_list_window,
+            text="Sulje",
+            bootstyle="secondary",
+            command=course_list_window.destroy,
+        ).pack(pady=10)
+
     def add_course_to_period(self, course, period):
-        self.course_service.add_course_to_period(course, period)
+        self.course_service.add_course_to_period(period, course)
+        self.hide_period_details()
         self.load_periods(self.currently_shown_year)
+        self.show_message("Kurssi lisätty!")
 
     def hide_year_details(self):
         if hasattr(self, "year_details_frame"):
             self.year_details_frame.pack_forget()
             self.year_details_frame.destroy()
         self.currently_shown_year = None
+
+    def on_back_button_clicked(self):
+        if hasattr(self, "add_course_view"):
+            try:
+                self.add_course_view.hide()
+                return
+            except tk.TclError:
+                pass
+
+        self.handle_back()

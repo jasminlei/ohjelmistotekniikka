@@ -7,9 +7,9 @@ class LoginView(Frame):
         self.auth_service = auth_service
         self.handle_back = handle_back
 
-        self.create_widgets()
+        self._create_widgets()
 
-    def create_widgets(self):
+    def _create_widgets(self):
         Label(self, text="Kirjaudu sisään", bootstyle="secondary").pack(pady=10)
 
         self.username_label = Label(self, text="Käyttäjänimi:")
