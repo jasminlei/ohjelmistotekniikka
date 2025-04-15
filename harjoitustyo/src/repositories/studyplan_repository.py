@@ -6,22 +6,22 @@ class StudyPlanRepository:
     def __init__(self, connection):
         self._connection = connection
 
-    def create(self, study_plan):
+    def create(self, studyplan):
         cursor = self._connection.cursor()
         cursor.execute(
             "INSERT INTO studyplans (plan_name, user_id) VALUES (?, ?)",
-            (study_plan.plan_name, study_plan.user_id),
+            (studyplan.plan_name, studyplan.user_id),
         )
         self._connection.commit()
-        study_plan.plan_id = cursor.lastrowid
+        studyplan.plan_id = cursor.lastrowid
         self._connection.commit()
-        return study_plan
+        return studyplan
 
-    def add_academic_year(self, study_plan, academic_year):
+    def add_academic_year(self, studyplan, academicyear):
         cursor = self._connection.cursor()
         cursor.execute(
             "INSERT INTO studyplan_academicyear (studyplan_id, academicyear_id) VALUES (?, ?)",
-            (study_plan.plan_id, academic_year.year_id),
+            (studyplan.plan_id, academicyear.year_id),
         )
         self._connection.commit()
         return True

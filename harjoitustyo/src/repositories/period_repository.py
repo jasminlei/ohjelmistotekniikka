@@ -25,7 +25,7 @@ class PeriodRepository:
             """,
             (
                 academic_year.year_id,
-            ),  # Oletetaan, että `academic_year`-objektissa on `year_id`
+            ),
         )
         rows = cursor.fetchall()
         return [Period(row[0], row[1], row[2]) for row in rows]
