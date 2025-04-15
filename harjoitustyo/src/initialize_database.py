@@ -49,7 +49,6 @@ def create_tables(connection):
         name TEXT NOT NULL,
         credits INTEGER NOT NULL,
         description TEXT,
-        is_scheduled BOOLEAN DEFAULT FALSE,
         is_completed BOOLEAN DEFAULT FALSE,
         grade INTEGER,
         completion_date TEXT,
