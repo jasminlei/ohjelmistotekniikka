@@ -52,7 +52,7 @@ poetry run invoke start
 
 - Sovelluksen käynnistys: `poetry run invoke start`
 
-- Testien suoritus: `poetry run invoke test`
+- Testien suoritus: `poetry run invoke tests`
 
 - Testikattavuusraportin voi generoida (avautuu suoraan selaimeen): `poetry run invoke coverage-report`
 
