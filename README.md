@@ -6,6 +6,10 @@ Tämä on Helsingin yliopiston _Ohjelmistotekniikka_-kurssin harjoitustyö.
 
 Harjoitustyön aiheena on opintojen seurantasovellus. Käyttäjä voi luoda opintosuunnitelman, aikatauluttaa kursseja, merkata kursseja suoritetuksi sekä seurata tilastoja opintojensa etenemisestä.
 
+## Release
+
+[Viikko 5](https://github.com/jasminlei/ohjelmistotekniikka/releases/tag/viikko5)
+
 ## Dokumentaatio
 
 [Vaatimusmäärittely](https://github.com/jasminlei/ohjelmistotekniikka/blob/main/harjoitustyo/dokumentaatio/vaatimusmaarittely.md)
