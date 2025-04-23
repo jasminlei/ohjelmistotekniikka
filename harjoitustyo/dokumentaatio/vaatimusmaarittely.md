@@ -26,8 +26,8 @@ Sovellukseen voi luoda käyttäjän, ja jokainen käyttäjä voi tehdä omia opi
 - Käyttäjä voi aikatauluttaa kurssin tietylle vuodelle ja periodille. ✅
 - Käyttäjä voi merkitä kurssin suoritetuksi. ✅
 - Käyttäjä voi ottaa kurssin pois suunnitelmasta. ✅
-- Käyttäjä voi tarkastella tilastoja opinnoistaan (suoritetut opintopisteet, kuinka monta prosenttia suoritettu/jäljellä, kuinka monta op keskimäärin periodissa yms.)
-- Käyttäjä voi poistaa kursseja, vuosia tai opintosuunnitelmia.
+- Käyttäjä voi tarkastella tilastoja opinnoistaan (suoritetut opintopisteet, kuinka monta prosenttia suoritettu, miten opontopisteet jakautuvat periodeille yms.) ✅
+- Käyttäjä voi poistaa kursseja ja vuosia. ✅
 
 ## Jatkokehitysideoita
 
