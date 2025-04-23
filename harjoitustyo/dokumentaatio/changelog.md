@@ -19,3 +19,12 @@
 - Lisätty testejä
 - Refaktroitu koodia
 - Tällä hetkellä käyttäjä voi aiempien viikkojen ominaisuuksien lisäksi lisätä kursseja opintosuunnitelmaan tiettyyn periodiin, poistaa kurssin opintosuunnitelmasta ja merkitä kurssin suoritetuksi.
+
+## Viikko 6
+
+- Lisätty StatisticsService luokka
+- Lisätty testejä
+- Refaktoroitu koodia siistimmäksi ja selkeämmäksi
+- Lisätty StudyPlan luokkaan goal_credits
+- Lisätty käyttäliittymään mahdollisuus tarkastella erilaisia tilastoja opinnoista (kuten opintopisteiden jakautuminen eri periodeille, keskiarvo, kuinka monta prosenttia suoritettu tavoitteesta)
+- Paranneltu ja siistitty käyttöliittymää
