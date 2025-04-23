@@ -6,6 +6,7 @@ from services.course_service import course_service
 from services.studyplan_service import studyplan_service
 from services.academicyear_service import academicyear_service
 from services.period_service import period_service
+from services.statistics_service import statistics_service
 
 from ui.ui import UI
 
@@ -27,6 +28,7 @@ def main():
         studyplan_service,
         academicyear_service,
         period_service,
+        statistics_service,
     )
     ui.start()
 
