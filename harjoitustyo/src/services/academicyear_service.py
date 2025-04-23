@@ -7,12 +7,22 @@ from services.period_service import period_service as period_serv
 
 
 class AcademicYearService:
+    """Service class for managing academic years and their related logic."""
+
     def __init__(self, academicyear_repository, course_service, period_service):
+        """
+        Initializes the AcademicYearService.
+
+        Args:
+            academicyear_repository: Repository for academic year data access.
+            course_service: Service for course-related operations.
+            period_service: Service for period-related operations.
+        """
         self._academicyear_repository = academicyear_repository
         self._course_service = course_service
         self._period_service = period_service
 
-    def years_are_valid(self, start_year, end_year):
+    def _years_are_valid(self, start_year, end_year):
         if not re.match(r"^\d{4}$", str(start_year)) or not re.match(
             r"^\d{4}$", str(end_year)
         ):
@@ -27,7 +37,19 @@ class AcademicYearService:
         return True, None
 
     def create(self, start_year, end_year):
-        valid, error_message = self.years_are_valid(start_year, end_year)
+        """
+        Creates a new academic year if the years are valid,
+        and creates the associated periods for the year.
+
+        Args:
+            start_year (int): The start year.
+            end_year (int): The end year.
+
+        Returns:
+            tuple[bool, object/str]: (True, academic_year) if successful,
+                                       (False, error_message) if not.
+        """
+        valid, error_message = self._years_are_valid(start_year, end_year)
 
         if not valid:
             return False, error_message
@@ -37,18 +59,41 @@ class AcademicYearService:
         return True, academic_year
 
     def year_exists_in_studyplan(self, studyplan, start_year, end_year):
+        """
+        Checks whether an academic year already exists in a given study plan.
+
+        Args:
+            studyplan (StudyPlan): The study plan to check.
+            start_year (int): Start year.
+            end_year (int): End year.
+
+        Returns:
+            bool: True if the year exists in the plan, False otherwise.
+        """
         return self._academicyear_repository.exists_in_studyplan(
             studyplan.plan_id, start_year, end_year
         )
 
     def get_academic_years_by_studyplan(self, studyplan):
+        """
+        Get all academic years linked to a given study plan.
+
+        Args:
+            studyplan (StudyPlan): The plan to get years from.
+
+        Returns:
+            list[AcademicYear]: List of academic years in the plan.
+        """
         return self._academicyear_repository.find_all_from_studyplan(studyplan.plan_id)
 
-    def get_total_credits(self, academicyear):
-        return self._academicyear_repository.get_total_credits(academicyear.year_id)
+    def delete_year(self, year_id):
+        """
+        Delete academic year by ID.
 
-    def get_completed_credits(self, academicyear):
-        return self._academicyear_repository.get_completed_credits(academicyear.year_id)
+        Args:
+            year_id (int): ID of the academic year to remove.
+        """
+        self._academicyear_repository.delete_by_id(year_id)
 
 
 academicyear_service = AcademicYearService(academicyear_repo, course_serv, period_serv)
