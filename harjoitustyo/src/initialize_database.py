@@ -88,6 +88,7 @@ def create_tables(connection):
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         plan_name TEXT NOT NULL,
         user_id INTEGER NOT NULL,
+        goal_credits INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
         );
     """)
