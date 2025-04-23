@@ -14,7 +14,7 @@ class TestAcademicYearRepository(unittest.TestCase):
         self.academicyear_repository = AcademicYearRepository(self.connection)
         self.studyplan_repository = StudyPlanRepository(self.connection)
 
-        self.studyplan = StudyPlan(None, "Testi opintosuunnitelma", 1)
+        self.studyplan = StudyPlan(None, "Testi opintosuunnitelma", 1, 180)
         self.studyplan_repository.create(self.studyplan)
 
     def test_create_academicyear(self):

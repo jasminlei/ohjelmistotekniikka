@@ -13,11 +13,13 @@ class TestStudyPlanRepository(unittest.TestCase):
         self.studyplan_repository = StudyPlanRepository(self.connection)
         self.academicyear_repository = AcademicYearRepository(self.connection)
 
-        self.test_studyplan = StudyPlan(1, "Testi", 5)
+        self.test_studyplan = StudyPlan(1, "Testi", 5, 180)
         self.studyplan_repository.create(self.test_studyplan)
 
     def test_create_studyplan_returns_created_studyplan(self):
-        studyplan = self.studyplan_repository.create(StudyPlan(2, "Suunnitelma", 1))
+        studyplan = self.studyplan_repository.create(
+            StudyPlan(2, "Suunnitelma", 1, 120)
+        )
 
         self.assertEqual(studyplan.plan_name, "Suunnitelma")
 
@@ -35,7 +37,7 @@ class TestStudyPlanRepository(unittest.TestCase):
         self.assertEqual(academicyear_in_plan[0].year_id, 1)
 
     def test_get_by_user_id(self):
-        other_plan = StudyPlan(2, "Toinen suunnitelma", 5)
+        other_plan = StudyPlan(2, "Toinen suunnitelma", 5, 180)
         self.studyplan_repository.create(other_plan)
         plans = self.studyplan_repository.get_by_user_id(5)
 
