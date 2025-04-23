@@ -5,6 +5,7 @@ from ui.add_course_view import AddCourseView
 from ui.list_courses_view import ListCoursesView
 from ui.add_studyplan_view import AddStudyPlanView
 from ui.studyplans_view import StudyPlansView
+from ui.statistics_view import StatisticView
 
 
 class UI:
@@ -17,6 +18,7 @@ class UI:
         studyplan_service,
         academicyear_service,
         period_service,
+        statistics_service,
     ):
         self._root = root
         self._user_service = user_service
@@ -25,6 +27,7 @@ class UI:
         self._studyplan_service = studyplan_service
         self._academicyear_service = academicyear_service
         self._period_service = period_service
+        self._statistics_service = statistics_service
         self._current_view = None
         self._logged_user = self._auth_service.get_logged_in_user_id()
 
@@ -101,13 +104,26 @@ class UI:
             self._academicyear_service,
             self._course_service,
             self._period_service,
+            self._statistics_service,
             self._logged_user,
             self._show_start_view,
         )
         self._current_view.pack()
 
     def _handle_view_stats(self):
-        pass
+        self._hide_current_view()
+        self._current_view = StatisticView(
+            self._root,
+            self._user_service,
+            self._studyplan_service,
+            self._academicyear_service,
+            self._course_service,
+            self._period_service,
+            self._statistics_service,
+            self._logged_user,
+            self._handle_back_to_start,
+        )
+        self._current_view.pack()
 
     def _show_register_view(self):
         self._hide_current_view()

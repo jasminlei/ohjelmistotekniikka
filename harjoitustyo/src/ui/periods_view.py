@@ -7,15 +7,19 @@ class PeriodsView(Frame):
         self,
         master,
         academic_year,
+        studyplan,
         period_service,
         course_service,
+        statistics_service,
         show_course_details,
         show_add_course_view,
     ):
         super().__init__(master)
         self.academic_year = academic_year
+        self.studyplan = studyplan
         self.period_service = period_service
         self.course_service = course_service
+        self.statistics_service = statistics_service
         self.show_course_details = show_course_details
         self.show_add_course_view = show_add_course_view
 
@@ -28,6 +32,17 @@ class PeriodsView(Frame):
         if not periods:
             Label(self, text="Ei lisättyjä periodeja.").pack()
             return
+
+        total_credits = self.statistics_service.get_total_credits(self.studyplan)
+        year_credits = self.statistics_service.get_scheduled_credits_by_year(
+            self.academic_year
+        )
+
+        Label(
+            self,
+            text=f"Suunnitelmaan valittu {total_credits} opintopisteen edestä kursseja, joista vuodella {self.academic_year.start_year}-{self.academic_year.end_year} {year_credits} op.",
+            font=("Arial", 12),
+        ).pack(pady=5)
 
         Label(
             self,
@@ -65,9 +80,9 @@ class PeriodsView(Frame):
                 Label(course_frame, text=course.name, width=20, anchor="w").pack(
                     side=tk.LEFT, padx=4
                 )
-                Label(course_frame, text=f"{course.credits}", width=5, anchor="w").pack(
-                    side=tk.LEFT, padx=4
-                )
+                Label(
+                    course_frame, text=f"{course.credits} op", width=5, anchor="w"
+                ).pack(side=tk.LEFT, padx=4)
                 Label(
                     course_frame,
                     text="Suoritettu ✓" if course.is_completed else "Ei suoritettu",
@@ -76,7 +91,7 @@ class PeriodsView(Frame):
                 ).pack(side=tk.LEFT, padx=4)
                 Label(
                     course_frame,
-                    text=f"Arvosana: {str(course.grade) if course.grade else '-'}",
+                    text=f"Arvosana: {'Hyv.' if course.grade == 'Hyväksytty' else course.grade if course.grade else '-'}",
                     width=20,
                     anchor="w",
                 ).pack(side=tk.LEFT, padx=4)

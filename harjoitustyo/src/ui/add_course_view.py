@@ -1,4 +1,5 @@
 from ttkbootstrap import Frame, Label, Entry, Button
+import tkinter as tk
 
 
 class AddCourseView(Frame):
@@ -31,8 +32,8 @@ class AddCourseView(Frame):
 
         self.description_label = Label(self, text="Kurssin kuvaus (valinnainen):")
         self.description_label.pack()
-        self.description_entry = Entry(self)
-        self.description_entry.pack(pady=5)
+        self.description_text = tk.Text(self, height=5, width=40, wrap="word")
+        self.description_text.pack(pady=5)
 
         self.error_label = Label(self, text="", foreground="red", bootstyle="danger")
         self.error_label.pack(pady=5)
@@ -59,7 +60,7 @@ class AddCourseView(Frame):
         code = self.code_entry.get().strip()
         name = self.name_entry.get().strip()
         credits = self.credits_entry.get().strip()
-        description = self.description_entry.get().strip()
+        description = self.description_text.get("1.0", "end").strip()
 
         if not code or not name or not credits:
             self.error_label.config(
@@ -76,5 +77,6 @@ class AddCourseView(Frame):
         )
         if success:
             self.success_label.config(text=f"Kurssi {course.name} lisätty.")
+            self.description_text.delete("1.0", "end")
         else:
             self.error_label.config(text=f"Virhe kurssin lisäämisessä: {course}")

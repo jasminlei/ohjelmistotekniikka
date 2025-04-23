@@ -40,7 +40,7 @@ class StartView(Frame):
             label.pack(pady=20)
             Button(
                 self,
-                text="Lisää yksittäinen kurssi",
+                text="Lisää kurssi",
                 command=self.handle_add_course,
                 bootstyle="success",
                 width=30,
