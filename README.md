@@ -20,6 +20,8 @@ Harjoitustyön aiheena on opintojen seurantasovellus. Käyttäjä voi luoda opin
 
 [Arkkitehtuuri](https://github.com/jasminlei/ohjelmistotekniikka/blob/main/harjoitustyo/dokumentaatio/arkkitehtuuri.md)
 
+[Käyttöohje](https://github.com/jasminlei/ohjelmistotekniikka/blob/main/harjoitustyo/dokumentaatio/kayttoohje.md)
+
 ## Asennus
 
 1. Kloonaa projekti haluamaasi paikkaan komennolla:
