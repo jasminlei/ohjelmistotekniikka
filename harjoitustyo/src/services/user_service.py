@@ -3,10 +3,11 @@ from entities.user import User
 
 
 class UserService:
+    """
+    Handles user-related actions like creating users.
+    """
+
     def __init__(self, repository):
-        """
-        Handles user-related actions like creating users.
-        """
         self._user_repository = repository
 
     def create_user(self, username, password):
