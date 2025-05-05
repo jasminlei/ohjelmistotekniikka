@@ -9,8 +9,8 @@ Harjoitustyön aiheena on opintojen seurantasovellus. Käyttäjä voi luoda opin
 ## Release
 
 [Viikko 5](https://github.com/jasminlei/ohjelmistotekniikka/releases/tag/viikko5)
-[Viikko 6](https://github.com/jasminlei/ohjelmistotekniikka/releases/tag/viikko6)
 
+[Viikko 6](https://github.com/jasminlei/ohjelmistotekniikka/releases/tag/viikko6)
 
 ## Dokumentaatio
 
@@ -46,7 +46,7 @@ cd harjoitustyo
 poetry install
 ```
 
-4. Alusta sovellus (luo tietokanta-tiedoston data-kansioon):
+4. Alusta sovellus (komento luo sqlite-tiedostot data-kansioon, voit myös määrittää tiedostojen nimet .env tiedostossa ks. [käyttöohje](https://github.com/jasminlei/ohjelmistotekniikka/blob/main/harjoitustyo/dokumentaatio/kayttoohje.md)):
 
 ```
 poetry run invoke build
