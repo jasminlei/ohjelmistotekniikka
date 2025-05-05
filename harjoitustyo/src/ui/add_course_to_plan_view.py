@@ -85,8 +85,7 @@ class AddCourseToPlanView(Frame):
     def add_selected_course(self, course):
         if course:
             self.add_course_callback(course, self.period)
-        else:
-            print("Kurssia ei löydetty.")
+            self.load_existing_courses()
 
     def hide(self):
         self.pack_forget()
