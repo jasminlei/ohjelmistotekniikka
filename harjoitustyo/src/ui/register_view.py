@@ -53,12 +53,13 @@ class RegisterView(Frame):
             )
             return
 
-        try:
-            user = self.user_service.create_user(username, password)
+        success, result = self.user_service.create_user(username, password)
+
+        if success:
             self.error_label.config(
-                text=f"Käyttäjä {user.username} luotu onnistuneesti!",
+                text=f"Käyttäjä {result.username} luotu onnistuneesti!",
                 foreground="green",
             )
             self.after(2000, self.handle_back)
-        except ValueError:
-            self.error_label.config(text="Käyttäjän luomisessa tapahtui virhe")
+        else:
+            self.error_label.config(text=result)

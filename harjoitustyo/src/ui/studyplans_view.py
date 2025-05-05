@@ -342,10 +342,16 @@ class StudyPlansView(Frame):
         ).pack(pady=10)
 
     def add_course_to_period(self, course, period):
-        self.course_service.add_course_to_period(period, course)
-        self.hide_period_details()
-        self.load_periods(self.currently_shown_year, self.currently_shown_studyplan)
-        self.show_message("Kurssi lisätty!")
+        success, error_message = self.course_service.add_course_to_period(
+            period, course
+        )
+
+        if success:
+            self.hide_period_details()
+            self.load_periods(self.currently_shown_year, self.currently_shown_studyplan)
+            self.show_message("Kurssi lisätty!")
+        else:
+            self.show_message(error_message, is_error=True)
 
     def hide_year_details(self):
         if hasattr(self, "year_details_frame"):

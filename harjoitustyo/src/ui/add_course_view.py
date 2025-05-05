@@ -44,7 +44,7 @@ class AddCourseView(Frame):
         self.success_label.pack(pady=5)
 
         self.add_course_button = Button(
-            self, text="Lisää kurssi", bootstyle="success", command=self.add_course
+            self, text="Lisää kurssi", bootstyle="success", command=self._add_course
         )
         self.add_course_button.pack(pady=10)
 
@@ -53,30 +53,33 @@ class AddCourseView(Frame):
         )
         self.back_button.pack(pady=5)
 
-    def add_course(self):
+    def _add_course(self):
         self.error_label.config(text="")
         self.success_label.config(text="")
 
         code = self.code_entry.get().strip()
         name = self.name_entry.get().strip()
-        credits = self.credits_entry.get().strip()
+        credits_str = self.credits_entry.get().strip()
         description = self.description_text.get("1.0", "end").strip()
 
-        if not code or not name or not credits:
+        if not code or not name or not credits_str:
             self.error_label.config(
                 text="Kurssin koodi, nimi ja opintopisteet ovat pakollisia!"
             )
             return
 
-        if not credits.isdigit():
+        try:
+            credits = int(credits_str)
+        except ValueError:
             self.error_label.config(text="Opintopisteiden tulee olla numero!")
             return
 
-        success, course = self._course_service.add_course(
+        success, course_or_error = self._course_service.add_course(
             code, name, credits, description
         )
+
         if success:
-            self.success_label.config(text=f"Kurssi {course.name} lisätty.")
+            self.success_label.config(text=f"Kurssi {course_or_error.name} lisätty.")
             self.description_text.delete("1.0", "end")
         else:
-            self.error_label.config(text=f"Virhe kurssin lisäämisessä: {course}")
+            self.error_label.config(text=f"{course_or_error}")

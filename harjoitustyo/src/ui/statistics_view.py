@@ -6,21 +6,15 @@ class StatisticView(Frame):
     def __init__(
         self,
         master,
-        user_service,
         studyplan_service,
         academicyear_service,
-        course_service,
-        period_service,
         statistics_service,
         user,
         handle_back,
     ):
         super().__init__(master)
-        self.user_service = user_service
         self.studyplan_service = studyplan_service
         self.academicyear_service = academicyear_service
-        self.course_service = course_service
-        self.period_service = period_service
         self.statistics_service = statistics_service
         self.user = user
         self.handle_back = handle_back
@@ -43,7 +37,6 @@ class StatisticView(Frame):
 
         if not self.plans:
             Label(self, text="Ei opintosuunnitelmia.").pack(padx=10, pady=10)
-            return
 
         plan_names = ["Valitse opintosuunnitelma"] + [
             plan.plan_name for plan in self.plans
@@ -54,7 +47,7 @@ class StatisticView(Frame):
             self,
             self.plan_var,
             *plan_names,
-            command=self.update_statistics,
+            command=self._update_statistics,
         ).pack(padx=10, pady=5, anchor="w")
 
         self.stats_frame = Frame(self)
@@ -64,7 +57,7 @@ class StatisticView(Frame):
             self, text="Takaisin", command=self.handle_back, bootstyle="secondary"
         ).pack(pady=(10, 5))
 
-    def update_statistics(self, selected_plan_name):
+    def _update_statistics(self, selected_plan_name):
         for widget in self.stats_frame.winfo_children():
             widget.destroy()
 
@@ -119,13 +112,13 @@ class StatisticView(Frame):
             self.stats_frame,
             self.year_var,
             *year_options,
-            command=lambda selected: self.update_year_statistics(selected, plan),
+            command=lambda selected: self._update_year_statistics(selected, plan),
         ).pack(pady=(0, 10), anchor="w")
 
         self.year_stats_frame = Frame(self.stats_frame)
         self.year_stats_frame.pack(fill=tk.BOTH, expand=True)
 
-    def update_year_statistics(self, selected_year, plan):
+    def _update_year_statistics(self, selected_year, plan):
         for widget in self.year_stats_frame.winfo_children():
             widget.destroy()
 

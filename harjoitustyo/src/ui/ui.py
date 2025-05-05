@@ -114,11 +114,8 @@ class UI:
         self._hide_current_view()
         self._current_view = StatisticView(
             self._root,
-            self._user_service,
             self._studyplan_service,
             self._academicyear_service,
-            self._course_service,
-            self._period_service,
             self._statistics_service,
             self._logged_user,
             self._handle_back_to_start,

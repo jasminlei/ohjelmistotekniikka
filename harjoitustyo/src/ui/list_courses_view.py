@@ -20,19 +20,6 @@ class ListCoursesView(Frame):
         label = Label(self, text="Kurssit", font=("Arial", 16), bootstyle="primary")
         label.pack(pady=20)
 
-        self.treeview = ttk.Treeview(
-            self, columns=("Code", "Name", "Credits", "Status"), show="headings"
-        )
-        self.treeview.heading("Code", text="Koodi", anchor="w")
-        self.treeview.heading("Name", text="Kurssi", anchor="w")
-        self.treeview.heading("Credits", text="Opintopisteet", anchor="w")
-        self.treeview.heading("Status", text="Tila", anchor="w")
-
-        self.treeview.column("Code", width=100)
-        self.treeview.column("Name", width=150)
-        self.treeview.column("Credits", width=100)
-        self.treeview.column("Status", width=120)
-
         list_container = Frame(self)
         list_container.pack(pady=20, fill="both", expand=True)
 
@@ -211,12 +198,12 @@ class ListCoursesView(Frame):
             text="Merkitse suoritetuksi",
             bootstyle="success",
             width=25,
-            command=lambda: self.submit_mark(
+            command=lambda: self._submit_mark(
                 grade_var.get(), date_entry.get(), feedback_label
             ),
         ).pack(pady=10)
 
-    def submit_mark(self, grade, completion_date, feedback_label):
+    def _submit_mark(self, grade, completion_date, feedback_label):
         if self.selected_course:
             success, message = self._course_service.mark_as_completed(
                 self.selected_course, grade, completion_date

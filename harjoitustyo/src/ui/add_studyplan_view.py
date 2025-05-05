@@ -25,6 +25,9 @@ class AddStudyPlanView(Frame):
         self._goal_credits_entry.insert(0, "180")
         self._goal_credits_entry.pack(pady=5)
 
+        self._message_label = Label(self, text="", foreground="red")
+        self._message_label.pack(pady=5)
+
         Button(
             self, text="Tallenna", command=self._save_studyplan, bootstyle="success"
         ).pack(pady=10)
@@ -36,21 +39,15 @@ class AddStudyPlanView(Frame):
         plan_name = self._plan_name_entry.get().strip()
         goal_credits = self._goal_credits_entry.get().strip()
 
-        if not plan_name:
-            self.show_message("Opintosuunnitelman nimi ei voi olla tyhjä!")
-            return
-
-        try:
-            goal_credits = int(goal_credits)
-            if goal_credits <= 0:
-                raise ValueError(
-                    "Tavoite opintopistemäärän täytyy olla positiivinen luku."
-                )
-        except ValueError as e:
-            self.show_message(f"Virheellinen opintopistemäärä: {e}")
-            return
-
-        self._studyplan_service.create_studyplan(
+        success, result = self._studyplan_service.create_studyplan(
             self._logged_user, plan_name, goal_credits
         )
-        self._handle_back()
+
+        if success:
+            self._handle_back()
+        else:
+            self.show_message(result)
+
+    def show_message(self, message):
+        self._message_label.config(text=message, foreground="red")
+        self.after(3000, lambda: self._message_label.config(text=""))

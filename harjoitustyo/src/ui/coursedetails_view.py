@@ -51,7 +51,7 @@ class CourseDetailsView:
             text=button_text,
             bootstyle="info",
             width=25,
-            command=self.show_mark_completed_form,
+            command=self._show_mark_completed_form,
         ).pack(pady=10)
 
         Button(
@@ -59,7 +59,7 @@ class CourseDetailsView:
             text="Poista kurssi suunnitelmasta",
             bootstyle="danger",
             width=25,
-            command=self.delete_course_from_plan,
+            command=self._delete_course_from_plan,
         ).pack(pady=10)
 
         Button(
@@ -70,7 +70,7 @@ class CourseDetailsView:
             command=self.window.destroy,
         ).pack(pady=10)
 
-    def show_mark_completed_form(self):
+    def _show_mark_completed_form(self):
         for widget in self.window.winfo_children():
             if (
                 isinstance(widget, Button)
@@ -108,10 +108,10 @@ class CourseDetailsView:
             form_frame,
             text="Tallenna",
             bootstyle="success",
-            command=self.mark_course_as_completed,
+            command=self._mark_course_as_completed,
         ).pack(pady=10)
 
-    def mark_course_as_completed(self):
+    def _mark_course_as_completed(self):
         success, result = self.course_service.mark_as_completed(
             self.course, self.grade_var.get(), self.date_entry.get()
         )
@@ -121,9 +121,9 @@ class CourseDetailsView:
             if self.on_update:
                 self.on_update()
         else:
-            self.show_error_message(result)
+            self._show_error_message(result)
 
-    def delete_course_from_plan(self):
+    def _delete_course_from_plan(self):
         success = self.course_service.remove_course_from_period(
             self.period, self.course
         )
@@ -132,7 +132,7 @@ class CourseDetailsView:
             if self.on_update:
                 self.on_update()
 
-    def show_error_message(self, message):
+    def _show_error_message(self, message):
         error_label = Label(
             self.window, text=message, foreground="red", font=("Arial", 10, "bold")
         )

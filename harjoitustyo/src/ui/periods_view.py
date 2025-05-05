@@ -24,9 +24,9 @@ class PeriodsView(Frame):
         self.show_add_course_view = show_add_course_view
 
         self.pack(pady=5, fill=tk.BOTH, expand=True)
-        self.render()
+        self._render()
 
-    def render(self):
+    def _render(self):
         periods = self.period_service.get_periods_by_academic_year(self.academic_year)
 
         if not periods:
@@ -64,9 +64,9 @@ class PeriodsView(Frame):
                 else "Kesä",
             )
 
-            self.render_courses(period_frame, period)
+            self._render_courses(period_frame, period)
 
-    def render_courses(self, period_frame, period):
+    def _render_courses(self, period_frame, period):
         courses = self.course_service.get_courses_by_period(period)
 
         if courses:
