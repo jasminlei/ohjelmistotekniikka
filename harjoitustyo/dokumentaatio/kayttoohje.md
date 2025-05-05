@@ -16,11 +16,22 @@ Asenna riippuvuudet:
 poetry install
 ```
 
+Jos haluat määritellä tietokannan käyttämät tiedostonimet, luo .env tiedosto harjoitustyo-kansion juureen. Lisää tiedostoon seuraavat rivit ja määritä niihin haluamasi SQLite-tietokantatiedostojen nimet:
+
+(Huomaa, että tiedostonimien täytyy päättyä .sqlite)
+
+```
+DATABASE_FILENAME=database.sqlite
+TEST_DATABASE_FILENAME=testdatabase.sqlite
+```
+
 Alusta sovelluksen tietokanta:
 
 ```
 poetry run invoke build
 ```
+
+Komentoa suoritettaessa käytetään .env-tiedostossa määriteltyjä tietokantatiedostonimiä (DATABASE_FILENAME ja TEST_DATABASE_FILENAME). Jos .env-tiedostoa ei ole, tai muuttujia ei ole määritelty, käytetään seuraavia oletusnimiä (database.sqlite ja test_database.sqlite).
 
 Käynnistä sovellus:
 
