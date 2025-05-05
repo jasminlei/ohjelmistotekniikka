@@ -49,8 +49,6 @@ class CourseService:
         Returns:
             tuple[bool, str | None]: True if valid, False and message if not.
         """
-        if not code or not name or not ects:
-            return False, "Kurssikoodi, nimi ja opintopisteet ovat pakollisia."
 
         if int(ects) < 0:
             return False, "Opintopisteiden on oltava positiivinen kokonaisluku."
@@ -89,10 +87,15 @@ class CourseService:
         Link a course to a specific period.
 
         Returns:
-            bool: True.
+            tuple: (bool, str) where:
+                - True, "" if successful
+                - False, "Virhe kurssin lisäämisessä" if failed
         """
-        self._course_repository.add_to_period(period, course)
-        return True
+        try:
+            self._course_repository.add_to_period(period, course)
+            return True, ""
+        except Exception:
+            return False, "Virhe kurssin lisäämisessä"
 
     def get_courses_by_period(self, period):
         """
