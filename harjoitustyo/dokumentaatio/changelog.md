@@ -28,3 +28,10 @@
 - Lisätty StudyPlan luokkaan goal_credits
 - Lisätty käyttäliittymään mahdollisuus tarkastella erilaisia tilastoja opinnoista (kuten opintopisteiden jakautuminen eri periodeille, keskiarvo, kuinka monta prosenttia suoritettu tavoitteesta)
 - Paranneltu ja siistitty käyttöliittymää
+
+## Viikko 7
+
+- Refaktoroitu olemassaolemaa koodia
+- Siistitty käyttöliittymää
+- Paranneltu testejä
+- Lisätty testausdokumentti ja paranneltu olemassaolevaa dokumentaatiota
