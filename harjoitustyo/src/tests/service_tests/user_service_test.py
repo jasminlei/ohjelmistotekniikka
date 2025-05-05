@@ -13,10 +13,26 @@ class TestUserService(unittest.TestCase):
         self.user_service = UserService(self.user_repository)
 
     def test_create_user(self):
-        user = self.user_service.create_user("test_user", "password123")
-        self.assertEqual(user.username, "test_user")
+        success, user = self.user_service.create_user("test_user", "password123")
 
-    def test_create_existing_user_raises_exception(self):
+        self.assertTrue(success)
+        self.assertEqual(user.username, "test_user")
+        self.assertEqual(user.id, 1)
+        self.assertEqual(user.password, "password123")
+
+    def test_create_existing_user_returns_false_and_error(self):
         self.user_service.create_user("test_user", "password")
-        with self.assertRaises(Exception):
-            self.user_service.create_user("test_user", "password2")
+        success, error = self.user_service.create_user("test_user", "password")
+        self.assertFalse(success)
+        self.assertEqual(error, "Käyttäjänimi test_user on jo varattu!")
+
+    def test_create_user_too_short_usernaem_returns_false_and_error(self):
+        success, error = self.user_service.create_user("pp", "password")
+        self.assertFalse(success)
+        self.assertEqual(error, "Käyttäjänimen tulee olla 3–30 merkkiä pitkä!")
+
+    def test_create_user_too_long_usernaem_returns_false_and_error(self):
+        username = "p" * 31
+        success, error = self.user_service.create_user(username, "password")
+        self.assertFalse(success)
+        self.assertEqual(error, "Käyttäjänimen tulee olla 3–30 merkkiä pitkä!")

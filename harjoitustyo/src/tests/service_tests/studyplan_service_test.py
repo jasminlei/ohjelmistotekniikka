@@ -43,7 +43,7 @@ class TestStudyPlanService(unittest.TestCase):
 
         self.test_studyplan = self.studyplan_service.create_studyplan(
             1, "Suunnitelma", 180
-        )
+        )[1]
         self.test_academicyear = self.studyplan_service.add_academic_year_to_plan(
             self.test_studyplan, 2024, 2025
         )[1]
@@ -52,8 +52,11 @@ class TestStudyPlanService(unittest.TestCase):
         )
 
     def test_create_studyplan(self):
-        studyplan = self.studyplan_service.create_studyplan(3, "Testi suunnitelma", 120)
+        success, studyplan = self.studyplan_service.create_studyplan(
+            3, "Testi suunnitelma", 120
+        )
 
+        self.assertTrue(success)
         self.assertEqual(studyplan.plan_name, "Testi suunnitelma")
         self.assertEqual(studyplan.user_id, 3)
         self.assertEqual(studyplan.plan_id, 2)

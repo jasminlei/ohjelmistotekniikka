@@ -57,7 +57,7 @@ class TestStatisticsService(unittest.TestCase):
 
         self.test_studyplan = self.studyplan_service.create_studyplan(
             1, "Testisuunnitelma", 180
-        )
+        )[1]
 
         self.test_academicyear = self.studyplan_service.add_academic_year_to_plan(
             self.test_studyplan, 2025, 2026
@@ -84,6 +84,7 @@ class TestStatisticsService(unittest.TestCase):
         completed_credits = self.statistics_service.get_completed_credits(
             self.test_studyplan
         )
+        print(completed_credits)
         self.assertEqual(completed_credits, 5)
 
     def test_get_percentage_completed(self):

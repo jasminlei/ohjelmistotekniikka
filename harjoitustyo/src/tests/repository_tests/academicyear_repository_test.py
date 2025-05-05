@@ -53,3 +53,14 @@ class TestAcademicYearRepository(unittest.TestCase):
             studyplan_id, 2020, 2021
         )
         self.assertFalse(non_existing_academic_year)
+
+    def test_delete_by_id_removes_year(self):
+        year = self.academicyear_repository.create(2022, 2023)
+        self.studyplan_repository.add_academic_year(self.studyplan, year)
+
+        self.academicyear_repository.delete_by_id(year.year_id)
+
+        years = self.academicyear_repository.find_all_from_studyplan(
+            self.studyplan.plan_id
+        )
+        self.assertNotIn(year.year_id, [y.year_id for y in years])

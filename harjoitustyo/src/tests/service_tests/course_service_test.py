@@ -40,14 +40,12 @@ class TestCourseService(unittest.TestCase):
         self.assertTrue(success)
         self.assertEqual(course.code, "TKT000")
 
-    def test_add_course_invalid_code(self):
+    def test_add_course_invalid_code_too_long(self):
         success, error_message = self.course_service.add_course(
-            "", "Testikurssi", 5, "Kiva kurssi"
+            "12345678910", "Testikurssi", 5, "Kiva kurssi"
         )
         self.assertFalse(success)
-        self.assertEqual(
-            error_message, "Kurssikoodi, nimi ja opintopisteet ovat pakollisia."
-        )
+        self.assertEqual(error_message, "Kurssikoodin merkkirajoitus on 10 merkkiä.")
 
     def test_add_course_invalid_ects(self):
         success, error_message = self.course_service.add_course(
