@@ -237,3 +237,7 @@ Sovellus käyttää SQLite tietokantaa. Tietokanta alustetaan initialize_databas
 - studyplan_academicyear: yhdistää opintosuunnitelmat ja akateemiset vuodet, jolloin jokainen akateeminen vuosi periodeineen ja kursseineen on sidottu johonkin opintosuunnitelmaan
 
 Kun käyttäjä lisää, muuttaa tai hakee tietoja käyttöliittymässä, services-luokat (esimerkiksi CourseService, StudyPlanService) kutsuvat tietokannan käsittelyyn liittyviä metodeja, jotka sijaitsevat repository-luokissa. Nämä Repository-luokat käsittelevät SQL-kyselyt ja tietokannan muokkaukset.
+
+## Ohjelman rakenteeseen jääneet heikkoudet
+
+Käyttöliittymän koodi kaipaisi vielä refaktorointia: koodia voisi jakaa vielä pienempiin luokkiin, niin, että yksi luokka olisi vastuussa pienemmästä osa-alueesta, ja koodin toisteisuutta voisi vähentää.
