@@ -16,4 +16,5 @@
 | 15.4. | 4        | Koodin refaktorointia, sekvenssikaavio, testejä                                                                                                                                                       |
 | 21.4. | 5        | UI:n muokkausta, koodin refaktorointia                                                                                                                                                                |
 | 22.4. | 8        | StatisticsService-luokka, koodin refaktorointia, tilastot-näkymä käyttöliittymään, testejä StatisticsServicelle, arkkitehtuurikuvaus, käyttöohje, dokumentaation päivitys                             |
-| yht.  | 58       |                                                                                                                                                                                                       |
+| 22.4. | 7        | Koodin refaktorointia, testausdokumentti, koodin siistimistä, dokumentaation päivitys                                                                                                                 |
+| yht.  | 65       |                                                                                                                                                                                                       |
