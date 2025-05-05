@@ -2,7 +2,7 @@
 
 Tämä on Helsingin yliopiston _Ohjelmistotekniikka_-kurssin harjoitustyö.
 
-## Opintojen seurantasovellus:
+## Opintojen seurantasovellus Gifu:
 
 Harjoitustyön aiheena on opintojen seurantasovellus. Käyttäjä voi luoda opintosuunnitelman, aikatauluttaa kursseja, merkata kursseja suoritetuksi sekä seurata tilastoja opintojensa etenemisestä.
 
@@ -21,6 +21,8 @@ Harjoitustyön aiheena on opintojen seurantasovellus. Käyttäjä voi luoda opin
 [Arkkitehtuuri](https://github.com/jasminlei/ohjelmistotekniikka/blob/main/harjoitustyo/dokumentaatio/arkkitehtuuri.md)
 
 [Käyttöohje](https://github.com/jasminlei/ohjelmistotekniikka/blob/main/harjoitustyo/dokumentaatio/kayttoohje.md)
+
+[Testausdokumentti](https://github.com/jasminlei/ohjelmistotekniikka/blob/main/harjoitustyo/dokumentaatio/testaus.md)
 
 ## Asennus
 
@@ -63,7 +65,3 @@ poetry run invoke start
 - Testikattavuusraportin voi generoida (avautuu suoraan selaimeen): `poetry run invoke coverage-report`
 
 - Pylintin voi suorittaa: `poetry run invoke pylint`
-
-## Käyttöohjeet
-
-- Ohjelma käynnistyy komennolla `poetry run invoke start`. Tämä avaa sovelluksen uudessa ikkunassa. Luo ensin käyttäjätunnus ja kirjaudu sisään, jonka jälkeen voit lisätä kursseja tai luoda opintosuunnitelman.
