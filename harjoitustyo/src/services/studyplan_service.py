@@ -29,19 +29,31 @@ class StudyPlanService:
 
     def create_studyplan(self, user_id, plan_name, goal_credits):
         """
-        Creates a new study plan for a user.
+        Creates a new study plan after validating inputs.
 
         Args:
             user_id (int): ID of the user.
             plan_name (str): Name of the study plan.
-            goal_credits (int): Credit target for the plan.
+            goal_credits (int | str): Target credit amount.
 
         Returns:
-            StudyPlan: The created study plan object.
+            tuple: (bool, StudyPlan | str),
+                   - True and StudyPlan if success,
+                   - False and error message if failed.
         """
+        if not plan_name or len(plan_name) > 100:
+            return False, "Opintosuunnitelman nimen tulee olla 1–100 merkkiä."
+
+        try:
+            goal_credits = int(goal_credits)
+            if goal_credits <= 0:
+                return False, "Opintopistemäärän tulee olla positiivinen kokonaisluku."
+        except ValueError:
+            return False, "Opintopistemäärän tulee olla numero."
+
         studyplan = StudyPlan(None, plan_name, user_id, goal_credits)
         studyplan = self._studyplan_repository.create(studyplan)
-        return studyplan
+        return True, studyplan
 
     def get_studyplans_by_user(self, user_id):
         """
