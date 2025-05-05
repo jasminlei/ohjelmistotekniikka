@@ -9,6 +9,8 @@ Harjoitustyön aiheena on opintojen seurantasovellus. Käyttäjä voi luoda opin
 ## Release
 
 [Viikko 5](https://github.com/jasminlei/ohjelmistotekniikka/releases/tag/viikko5)
+[Viikko 6](https://github.com/jasminlei/ohjelmistotekniikka/releases/tag/viikko6)
+
 
 ## Dokumentaatio
 
